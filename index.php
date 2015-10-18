@@ -10,7 +10,7 @@
 	require_once('view/MapView.php');
 	require_once('view/ControlsView.php');
 	
-	$mapDAL = new \model\MapDAL();
+	$mapDAL = new \model\DAL\MapDAL();
 	$map = new \model\Map($mapDAL);
 	$layoutView = new \view\LayoutView();
 	$mapView = new \view\MapView();
