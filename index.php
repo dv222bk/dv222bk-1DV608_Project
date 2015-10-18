@@ -1,8 +1,15 @@
 <?php
     require_once('model/Map.php');
 	require_once('model/MapTile.php');
-	require_once('model/dal/MapDAL.php');
+	require_once('model/MapHazard.php');
 	
+	require_once('model/DAL/MapDAL.php');
+
+	require_once('model/exceptions/CantMoveInDirectionException.php');
+	require_once('model/exceptions/DatabaseException.php');
+	require_once('model/exceptions/IncorrectCookieInformationException.php');
+	require_once('model/exceptions/OutOfMovesException.php');
+
 	require_once('controller/Controls.php');
 	require_once('controller/MapController.php');
 	
