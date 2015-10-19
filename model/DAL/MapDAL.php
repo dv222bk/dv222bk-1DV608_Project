@@ -15,7 +15,10 @@ class MapDAL {
 			}
 			
 			if($i == 50) {
-				$array[$i] = "CNHEPSGW";
+				$array[$i] = "CNHSGWHQ";
+			}
+			if($i == 51) {
+				$array[$i] = "";
 			}
 		}
 		

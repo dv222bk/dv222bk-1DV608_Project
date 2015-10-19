@@ -12,8 +12,6 @@ class DrawMapTile {
 			$drawnMapTile = '<div class="mapTile">';
 		}
 		
-		$mapTile->MakeVisible();
-		
 		if($mapTile->GetVisibility()) {
 			
 			$drawnMapTile .= $this->DrawNorthPartOfTile($mapTile);
