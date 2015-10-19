@@ -23,8 +23,9 @@
 	$layoutView = new \view\LayoutView();
 	$mapView = new \view\MapView();
 	$controlsView = new \view\ControlsView();
-	$controls = new \controller\Controls($controlsView);
+	$controls = new \controller\Controls($map, $controlsView);
 	$mapController = new \controller\MapController($map, $mapView);
 	
 	$mapController->SaveMap();
+	$controls->EnableButtons();
 	$layoutView->Render($mapView, $controlsView, 100);

@@ -15,7 +15,6 @@ class LayoutView {
 		      <body>
 			      <main>
 				      <h1>PHP Maze</h1>
-				      <h2>Map</h2>
 				      <div id="Map">
 				      	' . $mapView->GetMapHTML() . '
 				      </div>
@@ -27,6 +26,19 @@ class LayoutView {
 					      <h3>Steps left</h3>
 					      ' . $stepsLeft . '
 					      ' . $this->GetMessage() . '
+					      <h2>How to play</h2>
+					      <p>You control a character on a map. Your goal is to go the exit of the map and enter the next map.</p>
+					      <p>The less steps you take to reach the exit, the more points you score</p>
+					      <p>When you are out of steps, the game is over</p>
+					      <p>Look out for hazards! They will consume extra steps!</p>
+					      <h3>Symbol meanings</h3>
+					      <ul>
+					      	<li>C - Your character</li>
+					      	<li>Q - Exit</li>
+					      	<li>H - Spike hazard (Takes 3 steps)</li>
+					      	<li>G - Goo hazard (Takes 5 steps)</li>
+					      	<li>P - Pit hazard (Takes 8 steps)</li>
+				      	  </ul>
 				      </div>
 			 	</main>
 		     </body>

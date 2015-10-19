@@ -49,8 +49,13 @@ class Map {
 		$this->FillMapTileArray($this->mapDAL->GetMapTileCodeArray());
 	}
 	
+	public function GetCharacterTile() {
+		$yxCords = $this->FindCharacterTileCords();
+		return $this->mapTileArray[$yxCords[0]][$yxCords[1]];
+	}
+	
 	private function MakeLineOfSightTilesVisible() {
-		$yxCords = $this->FindCharacterTile();
+		$yxCords = $this->FindCharacterTileCords();
 		if($yxCords != false) {
 			$mapTileArray = $this->mapTileArray;
 			
@@ -69,7 +74,7 @@ class Map {
 		}
 	}
 	
-	private function FindCharacterTile() {
+	private function FindCharacterTileCords() {
 		for($yCord = 0; $yCord < self::maxY; $yCord += 1) {
 			for($xCord = 0; $xCord < self::maxX; $xCord += 1) {
 				if($this->mapTileArray[$yCord][$xCord]->HasCharacter()) {

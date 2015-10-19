@@ -1,3 +1,7 @@
+ul {
+    list-style: none;
+}
+
 #Map{
     width: 75%;
     float: left;
