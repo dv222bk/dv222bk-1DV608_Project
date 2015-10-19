@@ -2,6 +2,6 @@
 
 namespace model\exception;
 
-class CantMoveInDirectionException extends Exception {
+class CantMoveInDirectionException extends \Exception {
 
 }

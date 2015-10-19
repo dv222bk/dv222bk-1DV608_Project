@@ -6,7 +6,13 @@ class DrawMapTile {
 	
 	public function DrawMapTile(\model\MapTile $mapTile) {
 		
-		$drawnMapTile = '<div class="mapTile">';
+		if($mapTile->HasCharacter()) {
+			$drawnMapTile = '<div class="mapTileCurrent">';
+		} else {
+			$drawnMapTile = '<div class="mapTile">';
+		}
+		
+		$mapTile->MakeVisible();
 		
 		if($mapTile->GetVisibility()) {
 			
@@ -29,7 +35,7 @@ class DrawMapTile {
 		$drawnMapTile = '##';
 		
 		if($hasNorthExit) {
-			$drawnMapTile .= '│ ' . $mapTile->GetNorthHazard() . ' │';
+			$drawnMapTile .= '│&nbsp;<span class="mapHazard">' . $mapTile->GetNorthHazard() . '</span>&nbsp;│';
 		} else {
 			$drawnMapTile .= '#####';
 		}
@@ -38,7 +44,7 @@ class DrawMapTile {
 		$drawnMapTile .= '####';
 		
 		if($hasNorthExit) {
-			$drawnMapTile .= '│   │';
+			$drawnMapTile .= '│&nbsp;&nbsp;&nbsp;│';
 		} else {
 			$drawnMapTile .= '#####';
 		}
@@ -54,41 +60,15 @@ class DrawMapTile {
 		$hasWestExit = $mapTile->HasWestExit();
 		$hasSouthExit = $mapTile->HasSouthExit();
 
-		function Row4And6($hasEastExit, $hasWestExit) {
-			
-			$drawnMapTile = '';
-			
-			if($hasWestExit) {
-				$drawnMapTile .= '   ';
-			} else {
-				$drawnMapTile .= '##│';
-			}
-			
-			$drawnMapTile .= '   ';
-			
-			if($hasEastExit) {
-				$drawnMapTile .= '   ';
-			} else {
-				$drawnMapTile .= '│##';
-			}
-			return $drawnMapTile;
-			
-		}
-
 		// row 3
 		if($hasWestExit) {
 			$drawnMapTile = '───';
-			if($hasNorthExit) {
-				$drawnMapTile .= ' ';
-			} else {
-				$drawnMapTile .= '─';
-			}
 		} else {
 			$drawnMapTile = '##│';
 		}
 		
 		if($hasNorthExit) {
-			$drawnMapTile .= '   ';
+			$drawnMapTile .= '&nbsp;&nbsp;&nbsp;';
 		} else {
 			$drawnMapTile .= '───';
 		}
@@ -100,48 +80,39 @@ class DrawMapTile {
 		}
 		
 		// row 4
-		$drawnMapTile .= Row4And6($hasEastExit, $hasWestExit);
-		
-		// row 5
 		if($hasWestExit) {
-			$drawnMapTile .= $mapTile->GetWestHazard() . '  ';
+			$drawnMapTile .= '<span class="mapHazard">' . $mapTile->GetWestHazard() . '</span>&nbsp;&nbsp;';
 		} else {
 			$drawnMapTile .= '##│';
 		}
 		
 		if($mapTile->HasCharacter()) {
-			$drawnMapTile .= 'C ';
+			$drawnMapTile .= '<span class="mapCharacter">C</span>&nbsp;';
 		} else {
-			$drawnMapTile .= '  ';
+			$drawnMapTile .= '&nbsp;&nbsp;';
 		}
 		
 		if($mapTile->HasMapExit()) {
-			$drawnMapTile .= 'Q';
+			$drawnMapTile .= '<span class="mapExit">Q</span>';
+		} else {
+			$drawnMapTile .= '&nbsp;';
 		}
 		
 		if($hasEastExit) {
-			$drawnMapTile .= '  ' . $mapTile->GetEastHazard();
+			$drawnMapTile .= '&nbsp;&nbsp;<span class="mapHazard">' . $mapTile->GetEastHazard() . '</span>';
 		} else {
 			$drawnMapTile .= '│##';
 		}
 		
-		// row 6
-		$drawnMapTile .= Row4And6($hasEastExit, $hasWestExit);
-		
-		// row 7
+		// row 5
 		if($hasWestExit) {
-			$drawnMapTile = '───';
-			if($hasNorthExit) {
-				$drawnMapTile .= ' ';
-			} else {
-				$drawnMapTile .= '─';
-			}
+			$drawnMapTile .= '───';
 		} else {
-			$drawnMapTile = '##│';
+			$drawnMapTile .= '##│';
 		}
 		
 		if($hasSouthExit) {
-			$drawnMapTile .= '   ';
+			$drawnMapTile .= '&nbsp;&nbsp;&nbsp;';
 		} else {
 			$drawnMapTile .= '───';
 		}
@@ -152,27 +123,27 @@ class DrawMapTile {
 			$drawnMapTile .= '│##';
 		}
 		
-		return drawnMapTile;
+		return $drawnMapTile;
 	}
 
 	private function DrawSouthPartOfTile(\model\MapTile $mapTile) {
 		
 		$hasSouthExit = $mapTile->HasSouthExit();
 		
-		// row 8
+		// row 6
 		$drawnMapTile = '##';
 		
 		if($hasSouthExit) {
-			$drawnMapTile .= '│   │';
+			$drawnMapTile .= '│&nbsp;&nbsp;&nbsp;│';
 		} else {
 			$drawnMapTile .= '#####';
 		}
 		
-		// row 9
+		// row 7
 		$drawnMapTile .= '####';
 		
 		if($hasSouthExit) {
-			$drawnMapTile .= '│ ' . $mapTile->GetSouthHazard() . ' │';
+			$drawnMapTile .= '│&nbsp;<span class="mapHazard">' . $mapTile->GetSouthHazard() . '</span>&nbsp;│';
 		} else {
 			$drawnMapTile .= '#####';
 		}

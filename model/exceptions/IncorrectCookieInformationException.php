@@ -2,6 +2,6 @@
 
 namespace model\exception;
 
-class IncorrectCookieInformationException extends Exception {
+class IncorrectCookieInformationException extends \Exception {
 
 }

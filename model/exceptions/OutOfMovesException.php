@@ -2,6 +2,6 @@
 
 namespace model\exception;
 
-class OutOfMovesException extends Exception {
+class OutOfMovesException extends \Exception {
 
 }

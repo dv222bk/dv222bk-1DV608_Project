@@ -2,6 +2,6 @@
 
 namespace model\exception;
 
-class DatabaseException extends Exception {
+class DatabaseException extends \Exception {
 
 }

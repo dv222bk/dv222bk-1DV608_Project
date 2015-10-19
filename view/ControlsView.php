@@ -1,3 +1,10 @@
 <?php
-    phpinfo();
-?>
+
+namespace view;
+
+class ControlsView {
+	
+	public function GetControlsHTML() {
+		
+	}
+}

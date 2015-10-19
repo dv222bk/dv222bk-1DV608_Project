@@ -1,3 +1,40 @@
-body {
+#Map{
+    width: 75%;
+    float: left;
+}
 
+#SideBar {
+    width: 25%;
+    float: left;
+}
+.mapTile, .mapTileCurrent {
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 0.75em;
+    display: inline-block;
+    width: 5.5em;
+    height: 7.5em;
+    border: 0.1em solid black;
+    word-wrap: break-word;
+    padding: 0.25em;
+    float: left;
+}
+
+.mapTileCurrent {
+    border-color: red;
+}
+
+#Map div:nth-of-type(16n + 1) {
+    clear: both;
+}
+
+.mapCharacter, .mapHazard, .mapExit {
+    font-weight: bold;
+}
+
+.mapCharacter {
+    color: red;
+}
+
+.mapExit {
+    color: blue;
 }

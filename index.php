@@ -16,6 +16,7 @@
 	require_once('view/LayoutView.php');
 	require_once('view/MapView.php');
 	require_once('view/ControlsView.php');
+	require_once('view/DrawMapTile.php');
 	
 	$mapDAL = new \model\DAL\MapDAL();
 	$map = new \model\Map($mapDAL);
@@ -24,3 +25,6 @@
 	$controlsView = new \view\ControlsView();
 	$controls = new \controller\Controls($controlsView);
 	$mapController = new \controller\MapController($map, $mapView);
+	
+	$mapController->SaveMap();
+	$layoutView->Render($mapView, $controlsView, 100);

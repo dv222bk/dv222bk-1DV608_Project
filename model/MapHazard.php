@@ -2,11 +2,21 @@
 
 namespace model;
 
-class MapHazard extends SplEnum {
-	const __default = self::None;
+class MapHazard {
 	
-	const None = " ";
-	const Spike = H;
-	const Goo = G;
-	const Pit = P;
+	const Spike = "H";
+	const Goo = "G";
+	const Pit = "P";
+	
+	public function GetSpike() {
+		return self::Spike;
+	}
+	
+	public function GetGoo() {
+		return self::Goo;
+	}
+	
+	public function GetPit() {
+		return self::Pit;
+	}
 }

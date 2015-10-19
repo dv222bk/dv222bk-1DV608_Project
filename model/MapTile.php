@@ -30,6 +30,7 @@ class MapTile {
 	 */
 	
 	private $mapTileCode;
+	private $mapHazard;
 	private $visible = false;
 	
 	public function __construct($code) {
@@ -39,6 +40,8 @@ class MapTile {
 		if($this->hasCharacter()) {
 			$this->visible = true;
 		}
+		
+		$this->mapHazard = new MapHazard();
 	}
 	
 	public function MakeVisible() {
@@ -58,88 +61,88 @@ class MapTile {
 	}
 	
 	public function HasCharacter() {
-		if(strpos($this->mapTileCode, 'C')) {
+		if(is_numeric(strpos($this->mapTileCode, 'C'))) {
 			return true;
 		}
 		return false;
 	}
 	
 	public function HasNorthExit() {
-		if(strpos($this->mapTileCode, 'N')) {
+		if(is_numeric(strpos($this->mapTileCode, 'N'))) {
 			return true;
 		}
 		return false;
 	}
 	
 	public function HasEastExit() {
-		if(strpos($this->mapTileCode, 'E')) {
+		if(is_numeric(strpos($this->mapTileCode, 'E'))) {
 			return true;
 		}
 		return false;
 	}
 
 	public function HasSouthExit() {
-		if(strpos($this->mapTileCode, 'S')) {
+		if(is_numeric(strpos($this->mapTileCode, 'S'))) {
 			return true;
 		}
 		return false;
 	}
 	
 	public function HasWestExit() {
-		if(strpos($this->mapTileCode, 'W')) {
+		if(is_numeric(strpos($this->mapTileCode, 'W'))) {
 			return true;
 		}
 		return false;
 	}
 
 	public function HasMapExit() {
-		if(strpos($this->mapTileCode, 'Q')) {
+		if(is_numeric(strpos($this->mapTileCode, 'Q'))) {
 			return true;
 		}
 		return false;
 	}
 
 	public function GetNorthHazard() {
-		if(strpos($this->mapTileCode, 'NH')) {
-			return new MapHazard(MapHazard::Spike);
-		} else if (strpos($this->mapTileCode, 'NP')) {
-			return new MapHazard(MapHazard::Pit);
-		} else if (strpos($this->mapTileCode, 'NG')) {
-			return new MapHazard(MapHazard::Goo);
+		if(is_numeric(strpos($this->mapTileCode, 'NH'))) {
+			return $this->mapHazard->GetSpike();
+		} else if (is_numeric(strpos($this->mapTileCode, 'NP'))) {
+			return $this->mapHazard->GetPit();
+		} else if (is_numeric(strpos($this->mapTileCode, 'NG'))) {
+			return $this->mapHazard->GetGoo();
 		}
-		return new MapHazard(MapHazard::None);
+		return '&nbsp;';
 	}
 	
 	public function GetEastHazard() {
-		if(strpos($this->mapTileCode, 'EH')) {
-			return new MapHazard(MapHazard::Spike);
-		} else if (strpos($this->mapTileCode, 'EP')) {
-			return new MapHazard(MapHazard::Pit);
-		} else if (strpos($this->mapTileCode, 'EG')) {
-			return new MapHazard(MapHazard::Goo);
+		if(is_numeric(strpos($this->mapTileCode, 'EH'))) {
+			return $this->mapHazard->GetSpike();
+		} else if (is_numeric(strpos($this->mapTileCode, 'EP'))) {
+			return $this->mapHazard->GetPit();
+		} else if (is_numeric(strpos($this->mapTileCode, 'EG'))) {
+			return $this->mapHazard->GetGoo();
 		}
-		return new MapHazard(MapHazard::None);
+		return '&nbsp;';
 	}
 	
 	public function GetSouthHazard() {
-		if(strpos($this->mapTileCode, 'SH')) {
-			return new MapHazard(MapHazard::Spike);
-		} else if (strpos($this->mapTileCode, 'SP')) {
-			return new MapHazard(MapHazard::Pit);
-		} else if (strpos($this->mapTileCode, 'SG')) {
-			return new MapHazard(MapHazard::Goo);
+		if(is_numeric(strpos($this->mapTileCode, 'SH'))) {
+			return $this->mapHazard->GetSpike();
+		} else if (is_numeric(strpos($this->mapTileCode, 'SP'))) {
+			return $this->mapHazard->GetPit();
+		} else if (is_numeric(strpos($this->mapTileCode, 'SG'))) {
+			return $this->mapHazard->GetGoo();
 		}
-		return new MapHazard(MapHazard::None);
+		return '&nbsp;';
 	}
 	
 	public function GetWestHazard() {
-		if(strpos($this->mapTileCode, 'WH')) {
-			return new MapHazard(MapHazard::Spike);
-		} else if (strpos($this->mapTileCode, 'WP')) {
-			return new MapHazard(MapHazard::Pit);
-		} else if (strpos($this->mapTileCode, 'WG')) {
-			return new MapHazard(MapHazard::Goo);
+		if(is_numeric(strpos($this->mapTileCode, 'WH'))) {
+			return $this->mapHazard->GetSpike();
+		} else if (is_numeric(strpos($this->mapTileCode, 'WP'))) {
+			return $this->mapHazard->GetPit();
+		} else if (is_numeric(strpos($this->mapTileCode, 'WG'))) {
+			return $this->mapHazard->GetGoo();
 		}
-		return new MapHazard(MapHazard::None);
+		return '&nbsp;';
 	}
 }

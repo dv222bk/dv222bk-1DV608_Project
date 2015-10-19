@@ -4,23 +4,19 @@ namespace model;
 
 class Map {
 	
-	const maxX = 8;
-	const maxY = 8;
+	const maxX = 16;
+	const maxY = 6;
 	
 	private $mapDAL;
 	private $mapTileArray = array(array());
 	private $charPos;
 	
-	public function __construct(\DAL\MapDAL $DAL) {
+	public function __construct(\model\DAL\MapDAL $DAL) {
 		$this->mapDAL = $DAL;
 	}
 	
-	public function GetMapDAL(){
-		return $mapDAL;
-	}
-	
 	public function GetMapTileArray() {
-		return $mapTileArray;
+		return $this->mapTileArray;
 	}
 	
 	public function GetMaxX() {
@@ -31,8 +27,8 @@ class Map {
 		return self::maxY;
 	}
 	
-	private function FillMapTileArray($mapTileCodeArray) {
-		Assert(count($mapTileCodeArray) == self::maxX * self::maxY);
+	public function FillMapTileArray($mapTileCodeArray) {
+		Assert(count($mapTileCodeArray) == self::maxX * self::maxY, "Count: " . count($mapTileCodeArray) . " Should be: " . self::maxX * self::maxY);
 		
 		$currentX = 0;
 		$currentY = 0;
@@ -48,8 +44,8 @@ class Map {
 		}	
 	}
 	
-	private function FillMapTileArrayFromDAL() {
-		
+	public function FillMapTileArrayFromDAL() {
+		$this->FillMapTileArray($this->mapDAL->GetMapTileCodeArray());
 	}
 }
 
