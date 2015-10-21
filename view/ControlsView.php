@@ -19,7 +19,7 @@ class ControlsView {
 	public function GetControlsHTML() {
 		return '<input type="submit" name="' . self::$northButton . '" value="&#8593;"' . ($this->enableNorth ? '' : 'Disabled') . ' />
 			<input type="submit" name="' . self::$westButton . '" value="&#8592;"' . ($this->enableWest ? '' : 'Disabled') . ' />
-			<input type="submit" name="' . self::$mapExitButton . '" value="Go down"' . ($this->enableMapExit ? '' : 'Disabled') . ' />
+			<input type="submit" name="' . self::$mapExitButton . '" value="Next Map"' . ($this->enableMapExit ? '' : 'Disabled') . ' />
 			<input type="submit" name="' . self::$eastButton . '" value="&#8594;"' . ($this->enableEast ? '' : 'Disabled') . ' />
 			<input type="submit" name="' . self::$southButton . '" value="&#8595;"' . ($this->enableSouth ? '' : 'Disabled') . ' />
 			<input type="submit" name="' . self::$restartButton . '" value="Restart game" />';

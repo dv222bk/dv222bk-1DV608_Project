@@ -37,6 +37,8 @@ class MapTile {
 		assert(is_string($code));
 		$this->mapTileCode = $code;
 		
+		$this->MakeVisible();
+		
 		if($this->hasCharacter()) {
 			$this->visible = true;
 		}

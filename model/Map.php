@@ -28,18 +28,9 @@ class Map {
 	}
 	
 	public function FillMapTileArray($mapTileCodeArray) {
-		Assert(count($mapTileCodeArray) == self::maxX * self::maxY, "Count: " . count($mapTileCodeArray) . " Should be: " . self::maxX * self::maxY);
-		
-		$currentX = 0;
-		$currentY = 0;
-		
-		foreach($mapTileCodeArray as $mapTileCode) {
-			$this->mapTileArray[$currentY][$currentX] = new MapTile($mapTileCode);
-
-			$currentX += 1;
-			if($currentX >= self::maxX) {
-				$currentX = 0;
-				$currentY += 1;
+		for($y = 0; $y < self::maxY; $y += 1) {
+			for($x = 0; $x < self::maxX; $x += 1) {
+				$this->mapTileArray[$y][$x] = new MapTile($mapTileCodeArray[$y][$x]);
 			}
 		}
 		$this->MakeLineOfSightTilesVisible();	
