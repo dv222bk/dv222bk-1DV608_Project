@@ -2,16 +2,29 @@ ul {
     list-style: none;
 }
 
-#Map{
-    width: 75%;
+#Maze{
+    width: 76em;
     float: left;
 }
 
+#Maze div:nth-of-type(16n + 1) {
+    clear: both;
+}
+
 #SideBar {
-    width: 25%;
+    width: 15em;
     float: left;
 }
-.mapTile, .mapTileCurrent {
+
+#scoreContainer, #stepsLeftContainer {
+    font-weight: bolder;
+}
+
+#score, #stepsLeft {
+    font-weight: normal;
+}
+
+.mazeTile, .mazeTileCurrent {
     font-family: "Lucida Console", Monaco, monospace;
     font-size: 0.75em;
     display: inline-block;
@@ -23,22 +36,18 @@ ul {
     float: left;
 }
 
-.mapTileCurrent {
+.mazeTileCurrent {
     border-color: red;
 }
 
-#Map div:nth-of-type(16n + 1) {
-    clear: both;
-}
-
-.mapCharacter, .mapHazard, .mapExit {
+.mazeCharacter, .mazeHazard, .mazeExit {
     font-weight: bold;
 }
 
-.mapCharacter {
+.mazeCharacter {
     color: red;
 }
 
-.mapExit {
+.mazeExit {
     color: blue;
 }

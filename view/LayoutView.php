@@ -4,7 +4,7 @@ namespace view;
 
 class LayoutView {
 	
-	public function Render(MapView $mapView, ControlsView $controlsView, $stepsLeft) {
+	public function Render(MazeView $mazeView, ControlsView $controlsView, $score, $stepsLeft) {
 		echo '<!DOCTYPE html>
 		  <html>
 		      <head>
@@ -15,19 +15,19 @@ class LayoutView {
 		      <body>
 			      <main>
 				      <h1>PHP Maze</h1>
-				      <div id="Map">
-				      	' . $mapView->GetMapHTML() . '
+				      <div id="Maze">
+				      	' . $mazeView->GetMazeHTML() . '
 				      </div>
 				      <div id="Sidebar">
+				      	  <div id="scoreContainer">Score: <span id="score">' . $score . '</span></div>
+					      <div id="stepsLeftContainer">Steps left: <span id="stepsLeft">' . $stepsLeft . '</span></div>
 					      <h2>Controls</h2>
 					      <div id="Controls">
 					      	' . $controlsView->GetControlsHTML() . '
 					      </div>
-					      <h3>Steps left</h3>
-					      ' . $stepsLeft . '
-					      ' . $this->GetMessage() . '
+					      ' . $this->GetMessage($mazeView) . '
 					      <h2>How to play</h2>
-					      <p>You control a character on a map. Your goal is to go the exit of the map and enter the next map.</p>
+					      <p>You control a character in a maze. Your goal is to go the exit of the maze and enter the next maze.</p>
 					      <p>The less steps you take to reach the exit, the more points you score</p>
 					      <p>When you are out of steps, the game is over</p>
 					      <p>Look out for hazards! They will consume extra steps!</p>
@@ -46,12 +46,11 @@ class LayoutView {
 		';
 	}
 	
-	private function GetMessage() {
-		if(isset($_SESSION['message'])) {
+	private function GetMessage($mazeView) {
+		if(is_string($mazeView->GetMessage())) {
 			echo '<h3>Message</h3><span class="message">
-				' . $_SESSION['message'] . '</span>';
+				' . $mazeView->GetMessage() . '</span>';
 				
-			unset($_SESSION['message']);
 		}
 	}
 }

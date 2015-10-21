@@ -4,35 +4,35 @@ namespace controller;
 
 class Controls {
 	
-	private $map;
+	private $maze;
 	private $controlsView;
 	
-	public function __construct(\model\Map $model, \view\ControlsView $view) {
-		$this->map = $model;
+	public function __construct(\model\Maze $model, \view\ControlsView $view) {
+		$this->maze = $model;
 		$this->controlsView = $view;
 	}
 	
 	public function EnableButtons() {
-		$mapTile = $this->map->GetCharacterTile();
+		$mazeTile = $this->maze->GetCharacterTile();
 		
-		if($mapTile->HasNorthExit()) {
+		if($mazeTile->HasNorthExit()) {
 			$this->controlsView->EnableNorth();
 		}
 		
-		if($mapTile->HasEastExit()) {
+		if($mazeTile->HasEastExit()) {
 			$this->controlsView->EnableEast();
 		}
 		
-		if($mapTile->HasSouthExit()) {
+		if($mazeTile->HasSouthExit()) {
 			$this->controlsView->EnableSouth();
 		}
 		
-		if($mapTile->HasWestExit()) {
+		if($mazeTile->HasWestExit()) {
 			$this->controlsView->EnableWest();
 		}
 		
-		if($mapTile->HasMapExit()) {
-			$this->controlsView->EnableMapExit();
+		if($mazeTile->HasMazeExit()) {
+			$this->controlsView->EnableMazeExit();
 		}
 	}
 }

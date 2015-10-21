@@ -2,7 +2,7 @@
 
 namespace model;
 
-class MapHazard {
+class MazeHazard {
 	
 	const Spike = "H";
 	const Goo = "G";
