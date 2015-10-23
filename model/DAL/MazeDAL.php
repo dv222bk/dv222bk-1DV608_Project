@@ -7,7 +7,9 @@ class MazeDAL {
 	private static $filePath = "save_files/";
 	private $mazeTileCodeArray;
 	private $score;
-	private $steps;
+	private $stepsAtStartOfMaze;
+	private $stepsLeft;
+	private $hasReadInformation = false;
 	
 	public function ReadFromFile($fileName) {
 		if(file_exists(self::$filePath . $fileName)) {
@@ -17,19 +19,22 @@ class MazeDAL {
 			
 			$this->score = $fileArray[0];
 			array_shift($fileArray);
-			$this->steps = $fileArray[0];
+			$this->stepsAtStartOfMaze = $fileArray[0];
+			array_shift($fileArray);
+			$this->stepsLeft = $fileArray[0];
 			array_shift($fileArray);
 			
-			$this->mazeTileCodeArray = $this->CreateMazeTileCodeArrayFromArray($fileArray);
+			$this->mazeTileCodeArray = $fileArray;
+			$this->hasReadInformation = true;
 		} else {
 			throw new \model\exceptions\FileDoesNotExistException();
 		}
 	}
 	
-	public function SaveToFile($mazeTileArray, $score, $steps, $maxY, $maxX, $fileName) {
+	public function SaveToFile($mazeTileArray, $score, $stepsAtStartOfMaze, $stepsLeft, $fileName) {
 		$file = fopen(self::$filePath . $fileName, "w");
 		
-		fwrite($file, $score . PHP_EOL . $steps . PHP_EOL . $maxY . PHP_EOL . $maxX . PHP_EOL);
+		fwrite($file, $score . PHP_EOL . $stepsAtStartOfMaze . PHP_EOL . $stepsLeft . PHP_EOL);
 		
 		foreach($mazeTileArray as $mazeTileRow) {
 			foreach($mazeTileRow as $mazeTile) {
@@ -59,32 +64,34 @@ class MazeDAL {
 	}
 	
 	public function GetMazeTileCodeArray() {
-		return $this->mazeTileCodeArray;
+		if(isset($this->mazeTileCodeArray)) {
+			return $this->mazeTileCodeArray;
+		}
+		return false;
 	}
 	
 	public function GetScore() {
-		return $this->$score;
-	}
-	
-	public function GetSteps() {
-		return $this->steps;
-	}
-	
-	private function CreateMazeTileCodeArrayFromArray($codeArray) {
-		$maxY = $codeArray[0];
-		array_shift($codeArray);
-		$maxX = $codeArray[0];
-		array_shift($codeArray);
-		
-		$mazeTileArray = array(array());
-		$arrayPos = 0;
-		for($y = 0; $y < $maxY; $y += 1) {
-			for($x = 0; $x < $maxX; $x += 1) {
-				$mazeTileArray[$y][$x] = $codeArray[$arrayPos];
-				$arrayPos += 1; 
-			}
+		if(isset($this->score)) {
+			return $this->score;
 		}
-		
-		return $mazeTileArray;
+		return false;
+	}
+	
+	public function GetStepsLeft() {
+		if(isset($this->stepsLeft)) {
+			return $this->stepsLeft;
+		}
+		return false;
+	}
+	
+	public function GetStepsAtStartOfMaze() {
+		if(isset($this->stepsAtStartOfMaze)) {
+			return $this->stepsAtStartOfMaze;
+		}
+		return false;
+	}
+	
+	public function HasReadInformation() {
+		return $this->hasReadInformation;
 	}
 }

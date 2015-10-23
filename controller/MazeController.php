@@ -18,11 +18,10 @@ class MazeController {
 		if(is_numeric($this->mazeView->GetIdentification())) {
 			try {
 				$this->mazeDAL->ReadFromFile($this->mazeView->GetIdentification());
-				$mazeTileCodeArray = $this->mazeDAL->GetMazeTileCodeArray();
-				$this->maze->FillMazeTileArray($mazeTileCodeArray);
+				$this->maze->FillMazeTileArrayFromDAL();
 			}
 			catch (\model\exceptions\FileDoesNotExistException $e) {
-				$this->mazeView->ShowErrorMessage($e);
+				$this->SaveExceptionMessage($e);
 				$this->mazeView->RemoveIdentification();
 				$this->mazeView->SetIdentification($this->mazeDAL->GetHighestFileNumber() + 1);
 				$this->maze->FillMazeTileArray($this->CreateMazeTileCodeArray());
@@ -34,14 +33,17 @@ class MazeController {
 		$this->mazeView->SaveMazeTileArray($this->maze->GetMazeTileArray());
 	}
 	
-	public function SaveMaze() {
+	public function SaveExceptionMessage($exception) {
+		$this->mazeView->SaveExceptionMessage($exception);
+	}
+	
+	public function SaveMaze($score, $stepsAtStartOfMaze, $stepsLeft) {
 		if(!is_numeric($this->mazeView->GetIdentification())) {
 			$userID = $this->mazeDAL->GetHighestFileNumber() + 1;
 		} else {
 			$userID = $this->mazeView->GetIdentification();
 		}
-		$this->mazeDAL->SaveToFile($this->maze->GetMazeTileArray(), $this->maze->GetScore(), $this->maze->GetSteps(), 
-									$this->maze->GetMaxY(), $this->maze->GetMaxX(), $userID);
+		$this->mazeDAL->SaveToFile($this->maze->GetMazeTileArray(), $score, $stepsAtStartOfMaze, $stepsLeft, $userID);
 	}
 	
 	public function RemoveMaze() {
@@ -65,11 +67,11 @@ class MazeController {
 			for($x = 0; $x < $maxX; $x += 1) {
 				$mazeTileCode = "";
 				
-				if($y == $characterCords[0] && $x == $characterCords[1]) {
+				if($y == $characterCords['y'] && $x == $characterCords['x']) {
 					$mazeTileCode .= "C";
 				}
 				
-				if($y == $exitCords[0] && $x == $exitCords[1]) {
+				if($y == $exitCords['y'] && $x == $exitCords['x']) {
 					$mazeTileCode .= "Q";
 				}
 				
@@ -131,8 +133,16 @@ class MazeController {
 		return $mazeTileCodeArray;
 	}
 
+	public function NewMaze() {
+		if($this->maze->GetCharacterTile()->HasMazeExit()) {
+			$this->maze->FillMazeTileArray($this->CreateMazeTileCodeArray());
+		} else {
+			throw new \model\exceptions\CannotMoveInDirectionException();
+		}
+	}
+
 	private function GetRandomMazeTileCords() {
-		return [mt_rand(0, $this->maze->GetMaxY() - 1), mt_rand(0, $this->maze->GetMaxX() - 1)];
+		return  ['y' => mt_rand(0, $this->maze->GetMaxY() - 1), 'x' => mt_rand(0, $this->maze->GetMaxX() - 1)];
 	}
 
 	private function GetRandomHazard() {

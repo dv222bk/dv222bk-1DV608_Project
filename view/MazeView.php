@@ -39,7 +39,7 @@ class MazeView {
 		unset($_COOKIE[self::$identification]);
 	}
 	
-	public function SaveErrorMessage($exception) {
+	public function SaveExceptionMessage($exception) {
 		
 	}
 	
