@@ -16,25 +16,13 @@ class MazeController {
 	
 	public function InitMaze() {
 		if(is_numeric($this->mazeView->GetIdentification())) {
-			try {
-				$this->mazeDAL->ReadFromFile($this->mazeView->GetIdentification());
-				$this->maze->FillMazeTileArrayFromDAL();
-			}
-			catch (\model\exceptions\FileDoesNotExistException $e) {
-				$this->SaveExceptionMessage($e);
-				$this->mazeView->RemoveIdentification();
-				$this->mazeView->SetIdentification($this->mazeDAL->GetHighestFileNumber() + 1);
-				$this->maze->FillMazeTileArray($this->CreateMazeTileCodeArray());
-			}
+			$this->mazeDAL->ReadFromFile($this->mazeView->GetIdentification());
+			$this->maze->FillMazeTileArrayFromDAL();
 		} else {
 			$this->mazeView->SetIdentification($this->mazeDAL->GetHighestFileNumber() + 1);
 			$this->maze->FillMazeTileArray($this->CreateMazeTileCodeArray());
 		}
 		$this->mazeView->SaveMazeTileArray($this->maze->GetMazeTileArray());
-	}
-	
-	public function SaveExceptionMessage($exception) {
-		$this->mazeView->SaveExceptionMessage($exception);
 	}
 	
 	public function SaveMaze($score, $stepsAtStartOfMaze, $stepsLeft) {
@@ -133,9 +121,10 @@ class MazeController {
 		return $mazeTileCodeArray;
 	}
 
-	public function NewMaze() {
+	public function NextMaze() {
 		if($this->maze->GetCharacterTile()->HasMazeExit()) {
 			$this->maze->FillMazeTileArray($this->CreateMazeTileCodeArray());
+			$this->mazeView->SaveMazeTileArray($this->maze->GetMazeTileArray());
 		} else {
 			throw new \model\exceptions\CannotMoveInDirectionException();
 		}

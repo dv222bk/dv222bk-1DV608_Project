@@ -4,7 +4,7 @@ namespace view;
 
 class LayoutView {
 	
-	public function Render(MazeView $mazeView, ControlsView $controlsView, $score, $stepsLeft) {
+	public function Render(MazeView $mazeView, ControlsView $controlsView, $score, $stepsLeft, $stepsTaken) {
 		echo '<!DOCTYPE html>
 		  <html>
 		      <head>
@@ -20,7 +20,7 @@ class LayoutView {
 				      </div>
 				      <div id="Sidebar">
 				      	  <div id="scoreContainer">Score: <span id="score">' . $score . '</span></div>
-					      <div id="stepsLeftContainer">Steps left: <span id="stepsLeft">' . $stepsLeft . '</span></div>
+					      <div id="stepsLeftContainer">Steps left: <span id="stepsLeft">' . $stepsLeft . (($stepsTaken !== 0) ? ' (-' . $stepsTaken . ')' : '') . '</span></div>
 					      <h2>Controls</h2>
 					      <div id="Controls">
 					      	' . $controlsView->GetControlsHTML() . '
@@ -47,9 +47,8 @@ class LayoutView {
 	}
 	
 	private function GetMessage($mazeView) {
-		if(is_string($mazeView->GetMessage())) {
-			echo '<h3>Message</h3><span class="message">
-				' . $mazeView->GetMessage() . '</span>';
+		if($mazeView->GetMessages() != '') {
+			echo '<h3>Message</h3>' . $mazeView->GetMessages();
 				
 		}
 	}

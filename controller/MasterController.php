@@ -26,35 +26,62 @@ class MasterController {
 	
 	public function PlayGame() {
 		
+		if($this->controlsView->RestartClicked()) {
+			$this->mazeDAL->removeFile($this->mazeView->GetIdentification());
+			$this->mazeView->RemoveIdentification();
+		}
+		
 		try {
 			$this->mazeController->InitMaze();
-			
-			if($this->mazeDAL->HasReadInformation()) {
-				$this->scoreKeeper->SetScore($this->mazeDAL->GetScore());
-				$this->scoreKeeper->SetStepsAtStartOfMaze($this->mazeDAL->GetStepsAtStartOfMaze());
-				$this->scoreKeeper->SetStepsLeft($this->mazeDAL->GetStepsLeft());
-			}
-			
-			if($this->controlsView->NorthClicked() || $this->controlsView->WestClicked() || 
-			$this->controlsView->EastClicked() || $this->controlsView->SouthClicked()) {
-				
-				$stepsTaken = $this->controls->MoveCharacter();
-				$this->scoreKeeper->DecreaseStepsLeft($stepsTaken);
-				
-			} else if ($this->controlsView->MazeExitClicked()) {
-				
-				$this->mazeController->NewMaze();
-				$this->scoreKeeper->AddScoreEndOfMaze();
-				
-			}
-			
-			$this->maze->MakeLineOfSightTilesVisible();
-			
-			$this->mazeController->SaveMaze($this->scoreKeeper->GetScore(), $this->scoreKeeper->GetStepsAtStartOfMaze(), $this->scoreKeeper->GetStepsLeft());
-			$this->controls->EnableButtons();
 		}
-		catch (\Exception $e) {
-			$this->$mazeView->SaveExceptionMessage($e);
+		catch (\model\exceptions\IncorrectCookieInformationException $e) {
+			$this->mazeView->SaveExceptionMessage($e);
+			$this->mazeView->RemoveIdentification();
+			$this->mazeController->InitMaze();
+		}
+		
+		if($this->mazeDAL->HasReadInformation()) {
+			$this->scoreKeeper->SetScore($this->mazeDAL->GetScore());
+			$this->scoreKeeper->SetStepsAtStartOfMaze($this->mazeDAL->GetStepsAtStartOfMaze());
+			$this->scoreKeeper->SetStepsLeft($this->mazeDAL->GetStepsLeft());
+		}
+		
+		$stepsTaken = 0;
+		
+		if($this->controlsView->NorthClicked() || $this->controlsView->WestClicked() || 
+		$this->controlsView->EastClicked() || $this->controlsView->SouthClicked()) {
+			
+			if($this->scoreKeeper->GetStepsLeft() > 0) {
+				try {
+					$stepsTaken = $this->controls->MoveCharacter();
+					$this->scoreKeeper->DecreaseStepsLeft($stepsTaken);
+					
+					if($this->scoreKeeper->GetStepsLeft() <= 0) {
+						// fix real game over here
+						$this->mazeView->SaveGameOverMessage($this->scoreKeeper->GetScore());
+					}
+				}
+				catch (\model\exceptions\CantMoveInDirectionException $e) {
+					$this->mazeView->SaveExceptionMessage($e);
+				}
+			} else {
+				// fix real game over here
+				$this->mazeView->SaveGameOverMessage($this->scoreKeeper->GetScore());
+			}
+			
+		} else if ($this->controlsView->MazeExitClicked()) {
+			
+			$this->mazeController->NextMaze();
+			$this->scoreKeeper->AddScoreEndOfMaze();
+			
+		}
+		
+		$this->maze->MakeLineOfSightTilesVisible();
+		
+		$this->mazeController->SaveMaze($this->scoreKeeper->GetScore(), $this->scoreKeeper->GetStepsAtStartOfMaze(), $this->scoreKeeper->GetStepsLeft());
+		
+		if($this->scoreKeeper->GetStepsLeft() > 0) {
+			$this->controls->EnableButtons();
 		}
 		
 		$this->layoutView->Render
@@ -62,7 +89,8 @@ class MasterController {
 			$this->mazeView, 
 			$this->controlsView, 
 			$this->scoreKeeper->GetScore(), 
-			$this->scoreKeeper->GetStepsLeft()
+			$this->scoreKeeper->GetStepsLeft(),
+			$stepsTaken
 		);
 	}
 }

@@ -71,17 +71,36 @@ class Maze {
 		if($yxCords != false) {
 			$mazeTileArray = $this->mazeTileArray;
 			
-			if($mazeTileArray[$yxCords["y"]][$yxCords["x"]]->HasNorthExit()) {
-				$mazeTileArray[$yxCords["y"] - 1][$yxCords["x"]]->MakeVisible();
+			$distance = 0;
+			while($mazeTileArray[$yxCords["y"] - $distance][$yxCords["x"]]->HasNorthExit()) {
+				if($mazeTileArray[$yxCords["y"] - ($distance + 1)][$yxCords["x"]]->HasSouthExit()) {
+					$mazeTileArray[$yxCords["y"] - ($distance + 1)][$yxCords["x"]]->MakeVisible();
+				}	
+				$distance += 1;
 			}
-			if($mazeTileArray[$yxCords["y"]][$yxCords["x"]]->HasEastExit()) {
-				$mazeTileArray[$yxCords["y"]][$yxCords["x"] + 1]->MakeVisible();
+			
+			$distance = 0;
+			while($mazeTileArray[$yxCords["y"]][$yxCords["x"] + $distance]->HasEastExit()) {
+				if($mazeTileArray[$yxCords["y"]][$yxCords["x"] + ($distance + 1)]->HasWestExit()) {
+					$mazeTileArray[$yxCords["y"]][$yxCords["x"] + ($distance + 1)]->MakeVisible();
+				}	
+				$distance += 1;
 			}
-			if($mazeTileArray[$yxCords["y"]][$yxCords["x"]]->HasWestExit()) {
-				$mazeTileArray[$yxCords["y"]][$yxCords["x"] - 1]->MakeVisible();
+			
+			$distance = 0;
+			while($mazeTileArray[$yxCords["y"]][$yxCords["x"] - $distance]->HasWestExit()) {
+				if($mazeTileArray[$yxCords["y"]][$yxCords["x"] - ($distance + 1)]->HasEastExit()) {
+					$mazeTileArray[$yxCords["y"]][$yxCords["x"] - ($distance + 1)]->MakeVisible();
+				}	
+				$distance += 1;
 			}
-			if($mazeTileArray[$yxCords["y"]][$yxCords["x"]]->HasSouthExit()) {
-				$mazeTileArray[$yxCords["y"] + 1][$yxCords["x"]]->MakeVisible();
+			
+			$distance = 0;
+			while($mazeTileArray[$yxCords["y"] + $distance][$yxCords["x"]]->HasSouthExit()) {
+				if($mazeTileArray[$yxCords["y"] + ($distance + 1)][$yxCords["x"]]->HasNorthExit()) {
+					$mazeTileArray[$yxCords["y"] + ($distance + 1)][$yxCords["x"]]->MakeVisible();
+				}	
+				$distance += 1;
 			}
 		}
 	}

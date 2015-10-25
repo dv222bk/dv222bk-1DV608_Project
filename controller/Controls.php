@@ -49,6 +49,9 @@ class Controls {
 			}
 			
 			$newTileCords["y"] -= 1;
+			
+			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "N");
+			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "S");
 						
 		} else if ($this->controlsView->EastClicked()) {
 			
@@ -58,6 +61,9 @@ class Controls {
 			
 			$newTileCords["x"] += 1;
 			
+			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "E");
+			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "W");
+			
 		} else if ($this->controlsView->WestClicked()) {
 			
 			if(!$mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]]->HasWestExit()) {
@@ -66,6 +72,9 @@ class Controls {
 			
 			$newTileCords["x"] -= 1;
 			
+			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "W");
+			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "E");
+			
 		} else if ($this->controlsView->SouthClicked()) {
 			
 			if(!$mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]]->HasSouthExit()) {
@@ -73,6 +82,9 @@ class Controls {
 			}
 			
 			$newTileCords["y"] += 1;
+			
+			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "S");
+			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "N");
 			
 		}
 		
@@ -85,5 +97,12 @@ class Controls {
 		$mazeTileArray[$newTileCords["y"]][$newTileCords["x"]]->SetMazeTileCode($mazeTileCode);
 		
 		return $stepsTaken;
+	}
+
+	private function GetStepsReductionFromTile($tile, $directionChar) {
+		if($mazeHazard = $tile->GetHazard($directionChar)) {
+			return $mazeHazard->GetStepRedcution();
+		}
+		return 0;
 	}
 }

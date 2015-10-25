@@ -18,11 +18,11 @@ class ControlsView {
 	
 	public function GetControlsHTML() {
 		return '<form method="post" >
-			<input type="submit" name="' . self::$northButton . '" value="&#8593;"' . ($this->enableNorth ? '' : 'Disabled') . ' />
-			<input type="submit" name="' . self::$westButton . '" value="&#8592;"' . ($this->enableWest ? '' : 'Disabled') . ' />
-			<input type="submit" name="' . self::$mazeExitButton . '" value="Next Maze"' . ($this->enableMazeExit ? '' : 'Disabled') . ' />
-			<input type="submit" name="' . self::$eastButton . '" value="&#8594;"' . ($this->enableEast ? '' : 'Disabled') . ' />
-			<input type="submit" name="' . self::$southButton . '" value="&#8595;"' . ($this->enableSouth ? '' : 'Disabled') . ' />
+			<input type="submit" name="' . self::$northButton . '" value="&#8593;"' . ($this->enableNorth ? '' : ' Disabled') . ' />
+			<input type="submit" name="' . self::$westButton . '" value="&#8592;"' . ($this->enableWest ? '' : ' Disabled') . ' />
+			<input type="submit" name="' . self::$mazeExitButton . '" value="Next Maze"' . ($this->enableMazeExit ? '' : ' Disabled') . ' />
+			<input type="submit" name="' . self::$eastButton . '" value="&#8594;"' . ($this->enableEast ? '' : ' Disabled') . ' />
+			<input type="submit" name="' . self::$southButton . '" value="&#8595;"' . ($this->enableSouth ? '' : ' Disabled') . ' />
 			<input type="submit" name="' . self::$restartButton . '" value="Restart game" />
 			</form>';
 	}
@@ -65,5 +65,9 @@ class ControlsView {
 	
 	public function MazeExitClicked() {
 		return isset($_POST[self::$mazeExitButton]);
+	}
+	
+	public function RestartClicked() {
+		return isset($_POST[self::$restartButton]);
 	}
 }

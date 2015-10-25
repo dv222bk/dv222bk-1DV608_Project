@@ -30,8 +30,8 @@ class MazeTile {
 	 */
 	
 	private $mazeTileCode;
-	private $mazeHazard;
 	private $visible = false;
+	private $mazeHazards;
 	
 	public function __construct($code) {
 		assert(is_string($code));
@@ -41,7 +41,12 @@ class MazeTile {
 			$this->visible = true;
 		}
 		
-		$this->mazeHazard = new MazeHazard();
+		$this->mazeHazards = 
+			[
+				new SpikeHazard(),
+				new GooHazard(),
+				new PitHazard()			
+			];
 	}
 	
 	public function MakeVisible() {
@@ -102,47 +107,13 @@ class MazeTile {
 		return false;
 	}
 
-	public function GetNorthHazard() {
-		if(is_numeric(strpos($this->mazeTileCode, 'NH'))) {
-			return $this->mazeHazard->GetSpike();
-		} else if (is_numeric(strpos($this->mazeTileCode, 'NP'))) {
-			return $this->mazeHazard->GetPit();
-		} else if (is_numeric(strpos($this->mazeTileCode, 'NG'))) {
-			return $this->mazeHazard->GetGoo();
+	public function GetHazard($directionChar) {
+		foreach($this->mazeHazards as $mazeHazard) {
+			if(is_numeric(strpos($this->mazeTileCode, $directionChar . $mazeHazard->GetMazeTileCodeChar()))) {
+				return $mazeHazard;
+			}
 		}
-		return '&nbsp;';
-	}
-	
-	public function GetEastHazard() {
-		if(is_numeric(strpos($this->mazeTileCode, 'EH'))) {
-			return $this->mazeHazard->GetSpike();
-		} else if (is_numeric(strpos($this->mazeTileCode, 'EP'))) {
-			return $this->mazeHazard->GetPit();
-		} else if (is_numeric(strpos($this->mazeTileCode, 'EG'))) {
-			return $this->mazeHazard->GetGoo();
-		}
-		return '&nbsp;';
-	}
-	
-	public function GetSouthHazard() {
-		if(is_numeric(strpos($this->mazeTileCode, 'SH'))) {
-			return $this->mazeHazard->GetSpike();
-		} else if (is_numeric(strpos($this->mazeTileCode, 'SP'))) {
-			return $this->mazeHazard->GetPit();
-		} else if (is_numeric(strpos($this->mazeTileCode, 'SG'))) {
-			return $this->mazeHazard->GetGoo();
-		}
-		return '&nbsp;';
-	}
-	
-	public function GetWestHazard() {
-		if(is_numeric(strpos($this->mazeTileCode, 'WH'))) {
-			return $this->mazeHazard->GetSpike();
-		} else if (is_numeric(strpos($this->mazeTileCode, 'WP'))) {
-			return $this->mazeHazard->GetPit();
-		} else if (is_numeric(strpos($this->mazeTileCode, 'WG'))) {
-			return $this->mazeHazard->GetGoo();
-		}
-		return '&nbsp;';
+		
+		return false;
 	}
 }

@@ -27,7 +27,7 @@ class MazeDAL {
 			$this->mazeTileCodeArray = $fileArray;
 			$this->hasReadInformation = true;
 		} else {
-			throw new \model\exceptions\FileDoesNotExistException();
+			throw new \model\exceptions\IncorrectCookieInformationException();
 		}
 	}
 	

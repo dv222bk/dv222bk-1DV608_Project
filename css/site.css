@@ -2,6 +2,35 @@ ul {
     list-style: none;
 }
 
+input {
+    font-size: 1.2em;
+    width: 6em;
+    height: 2em;
+    margin-left: 0.4em;
+    margin-bottom: 1em;
+    border-color: black;
+}
+
+input:disabled {
+    background-color: black;
+    color: black;
+}
+
+input:hover:not(:disabled) {
+    background-color: gray;
+}
+
+input:first-child, input:nth-child(5){
+    display: block;
+    margin-left: 7em;
+}
+
+input:last-child {
+    margin-top: 1em;
+    margin-left: 5em;
+    width: 10em;
+}
+
 #Maze{
     width: 76em;
     float: left;
@@ -11,8 +40,8 @@ ul {
     clear: both;
 }
 
-#SideBar {
-    width: 15em;
+#Sidebar {
+    width: 24em;
     float: left;
 }
 

@@ -33,19 +33,18 @@ class DrawMazeTile {
 		$drawnMazeTile = '##';
 		
 		if($hasNorthExit) {
-			$drawnMazeTile .= '│&nbsp;<span class="mazeHazard">' . $mazeTile->GetNorthHazard() . '</span>&nbsp;│';
+			if($northHazard = $mazeTile->GetHazard("N")) {
+				$drawnMazeTile .= '│&nbsp;<span class="mazeHazard">' . $northHazard->GetMazeTileCodeChar() . '</span>&nbsp;│';
+			} else {
+				$drawnMazeTile .= '│&nbsp;&nbsp;&nbsp;│';
+			}
 		} else {
 			$drawnMazeTile .= '#####';
 		}
 
 		// row 2
 		$drawnMazeTile .= '####';
-		
-		if($hasNorthExit) {
-			$drawnMazeTile .= '│&nbsp;&nbsp;&nbsp;│';
-		} else {
-			$drawnMazeTile .= '#####';
-		}
+		$drawnMazeTile .= ($hasNorthExit) ? '│&nbsp;&nbsp;&nbsp;│' : '#####';
 		$drawnMazeTile .= '##';
 		
 		return $drawnMazeTile;
@@ -59,68 +58,40 @@ class DrawMazeTile {
 		$hasSouthExit = $mazeTile->HasSouthExit();
 
 		// row 3
-		if($hasWestExit) {
-			$drawnMazeTile = '───';
-		} else {
-			$drawnMazeTile = '##│';
-		}
-		
-		if($hasNorthExit) {
-			$drawnMazeTile .= '&nbsp;&nbsp;&nbsp;';
-		} else {
-			$drawnMazeTile .= '───';
-		}
-		
-		if($hasEastExit) {
-			$drawnMazeTile .= '───';
-		} else {
-			$drawnMazeTile .= '│##';
-		}
+		$drawnMazeTile = ($hasWestExit) ? '───' : '##│';
+		$drawnMazeTile .= ($hasNorthExit) ? '&nbsp;&nbsp;&nbsp;' : '───';
+		$drawnMazeTile .= ($hasEastExit) ? '───' : '│##';
 		
 		// row 4
 		if($hasWestExit) {
-			$drawnMazeTile .= '<span class="mazeHazard">' . $mazeTile->GetWestHazard() . '</span>&nbsp;&nbsp;';
+			if($westHazard = $mazeTile->GetHazard("W")) {
+				$drawnMazeTile .= '<span class="mazeHazard">' . $westHazard->GetMazeTileCodeChar() . '</span>&nbsp;&nbsp;';
+			} else {
+				$drawnMazeTile .= '&nbsp;&nbsp;&nbsp;';
+			}
+			
 		} else {
 			$drawnMazeTile .= '##│';
 		}
 		
-		if($mazeTile->HasCharacter()) {
-			$drawnMazeTile .= '<span class="mazeCharacter">C</span>&nbsp;';
-		} else {
-			$drawnMazeTile .= '&nbsp;&nbsp;';
-		}
-		
-		if($mazeTile->HasMazeExit()) {
-			$drawnMazeTile .= '<span class="mazeExit">Q</span>';
-		} else {
-			$drawnMazeTile .= '&nbsp;';
-		}
+		$drawnMazeTile .= ($mazeTile->HasCharacter()) ? '<span class="mazeCharacter">C</span>&nbsp;' : '&nbsp;&nbsp;';
+		$drawnMazeTile .= ($mazeTile->HasMazeExit()) ? '<span class="mazeExit">Q</span>' : '&nbsp;';
 		
 		if($hasEastExit) {
-			$drawnMazeTile .= '&nbsp;&nbsp;<span class="mazeHazard">' . $mazeTile->GetEastHazard() . '</span>';
+			if($eastHazard = $mazeTile->GetHazard("E")) {
+				$drawnMazeTile .= '&nbsp;&nbsp;<span class="mazeHazard">' . $eastHazard->GetMazeTileCodeChar() . '</span>';
+			} else {
+				$drawnMazeTile .= '&nbsp;&nbsp;&nbsp;';
+			}
 		} else {
 			$drawnMazeTile .= '│##';
 		}
 		
 		// row 5
-		if($hasWestExit) {
-			$drawnMazeTile .= '───';
-		} else {
-			$drawnMazeTile .= '##│';
-		}
-		
-		if($hasSouthExit) {
-			$drawnMazeTile .= '&nbsp;&nbsp;&nbsp;';
-		} else {
-			$drawnMazeTile .= '───';
-		}
-		
-		if($hasEastExit) {
-			$drawnMazeTile .= '───';
-		} else {
-			$drawnMazeTile .= '│##';
-		}
-		
+		$drawnMazeTile .= ($hasWestExit) ? '───' : '##│';
+		$drawnMazeTile .= ($hasSouthExit) ? '&nbsp;&nbsp;&nbsp;' : '───';
+		$drawnMazeTile .= ($hasEastExit) ? '───' : '│##';
+
 		return $drawnMazeTile;
 	}
 
@@ -130,18 +101,17 @@ class DrawMazeTile {
 		
 		// row 6
 		$drawnMazeTile = '##';
-		
-		if($hasSouthExit) {
-			$drawnMazeTile .= '│&nbsp;&nbsp;&nbsp;│';
-		} else {
-			$drawnMazeTile .= '#####';
-		}
+		$drawnMazeTile .= ($hasSouthExit) ? '│&nbsp;&nbsp;&nbsp;│' : '#####';
 		
 		// row 7
 		$drawnMazeTile .= '####';
 		
 		if($hasSouthExit) {
-			$drawnMazeTile .= '│&nbsp;<span class="mazeHazard">' . $mazeTile->GetSouthHazard() . '</span>&nbsp;│';
+			if($southHazard = $mazeTile->GetHazard("S")) {
+				$drawnMazeTile .= '│&nbsp;<span class="mazeHazard">' . $southHazard->GetMazeTileCodeChar() . '</span>&nbsp;│';
+			} else {
+				$drawnMazeTile .= '│&nbsp;&nbsp;&nbsp;│';
+			}
 		} else {
 			$drawnMazeTile .= '#####';
 		}

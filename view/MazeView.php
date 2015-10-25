@@ -4,9 +4,9 @@ namespace view;
 
 class MazeView {
 	
-	private static $identification = "MazeView::Identification";
+	private static $identification = 'MazeView::Identification';
 	private $mazeTileArray = array(array());
-	private $message;
+	private $messages = '';
 	
 	public function SaveMazeTileArray($array) {
 		$this->mazeTileArray = $array;
@@ -14,7 +14,7 @@ class MazeView {
 	
 	public function GetMazeHTML() {
 		$drawMazeTile = new DrawMazeTile();	
-		$maze = "";
+		$maze = '';
 		
 		foreach($this->mazeTileArray as $tileRow) {
 			foreach($tileRow as $mazeTile) {
@@ -39,11 +39,23 @@ class MazeView {
 		unset($_COOKIE[self::$identification]);
 	}
 	
-	public function SaveExceptionMessage($exception) {
-		
+	public function SaveExceptionMessage(\Exception $exception) {
+		$exceptionClass = get_class($exception);
+		switch ($exceptionClass) {
+			case 'model\exceptions\CantMoveInDirectionException' :
+				$this->messages .= '<span class="message">You cannot move in that direction!</span>';
+				break;
+			case 'model\exceptions\IncorrectCookieInformationException' :
+				$this->messages .= '<span class="message">Your cookie contains invalid information</span>';
+				break;
+		}
 	}
 	
-	public function GetMessage() {
-		return $this->message;
+	public function SaveGameOverMessage($score) {
+		$this->messages .= '<span class="message">Game Over! Final score: ' . $score . '</span>';
+	}
+	
+	public function GetMessages() {
+		return $this->messages;
 	}
 }
