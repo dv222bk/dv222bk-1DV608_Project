@@ -2,70 +2,77 @@
 
 namespace model\DAL;
 
-class MazeDAL {
+class MazeDAL extends DAL {
 	
 	private static $filePath = "save_files/";
-	private $mazeTileCodeArray;
+	private $mazeString;
 	private $score;
 	private $stepsAtStartOfMaze;
 	private $stepsLeft;
 	private $hasReadInformation = false;
 	
-	public function ReadFromFile($fileName) {
-		if(file_exists(self::$filePath . $fileName)) {
-			$fileContents = rtrim(file_get_contents(self::$filePath . $fileName));
+	public function GetDatabaseContent($identificationString, $userAgent) {
+		$mysqli = $this->GetMysqli();
+		
+		$mysqli->query("SET @UserAgent = '" . mysqli_real_escape_string($mysqli, $userAgent) . "'");
+		$mysqli->query("SET @IDString = '" . mysqli_real_escape_string($mysqli, $identificationString) . "'");
+		
+		$result = $mysqli->query("CALL GetContentFromIdentification(@UserAgent, @IDString)");
+		
+		if($result->num_rows == 1) {
 			
-			$fileArray = explode(PHP_EOL, $fileContents);
+	    	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	        $this->mazeString = $row["MazeString"];
+			$this->score = $row["Score"];
+	        $this->stepsLeft = $row["StepsLeft"];
+			$this->stepsAtStartOfMaze = $row["StepsAtStartOfMaze"];
 			
-			$this->score = $fileArray[0];
-			array_shift($fileArray);
-			$this->stepsAtStartOfMaze = $fileArray[0];
-			array_shift($fileArray);
-			$this->stepsLeft = $fileArray[0];
-			array_shift($fileArray);
-			
-			$this->mazeTileCodeArray = $fileArray;
 			$this->hasReadInformation = true;
+			
+			$mysqli->close();
 		} else {
-			throw new \model\exceptions\IncorrectCookieInformationException();
+		    throw new \model\exceptions\IncorrectCookieInformationException();
 		}
 	}
 	
-	public function SaveToFile($mazeTileArray, $score, $stepsAtStartOfMaze, $stepsLeft, $fileName) {
-		$file = fopen(self::$filePath . $fileName, "w");
+	public function SaveContentToDatabase($identificationString, $userAgent, $mazeTileArray, $score, $stepsAtStartOfMaze, $stepsLeft) {
+		$mysqli = $this->GetMysqli();
 		
-		fwrite($file, $score . PHP_EOL . $stepsAtStartOfMaze . PHP_EOL . $stepsLeft . PHP_EOL);
+		$mysqli->query("SET @UserAgent = '" . mysqli_real_escape_string($mysqli, $userAgent) . "'");
+		$mysqli->query("SET @IDString = '" . mysqli_real_escape_string($mysqli, $identificationString) . "'");
+		$mysqli->query("SET @Score = '" . $score . "'");
+		$mysqli->query("SET @StepsLeft = '" . $stepsLeft . "'");
+		$mysqli->query("SET @StepsAtStartOfMaze = '" . $stepsAtStartOfMaze . "'");
+		
+		$mazeString = "";
 		
 		foreach($mazeTileArray as $mazeTileRow) {
 			foreach($mazeTileRow as $mazeTile) {
-				fwrite($file, $mazeTile->GetMazeTileCode() . PHP_EOL);
+				$mazeString .= $mazeTile->GetMazeTileCode() . PHP_EOL;
 			}
 		}
-		fclose($file);
+		
+		$mysqli->query("SET @MazeString = '" . $mazeString . "'");
+		
+		$mysqli->query("CALL CreateUpdateContentFromIdentification(@UserAgent, @IDString, @MazeString, @Score, @StepsLeft, @StepsAtStartOfMaze)");
+		
+		$mysqli->close();
 	}
 	
-	public function RemoveFile($fileName) {
-		if(file_exists(self::$filePath . $fileName)) {
-			unlink(self::$filePath . $fileName);
-		} else {
-			throw new \model\exceptions\FileDoesNotExistException();
-		}
+	public function RemoveFromDatabase($identificationString, $userAgent) {
+		$mysqli = $this->GetMySqli();
+		
+		$mysqli->query("SET @UserAgent = '" . mysqli_real_escape_string($mysqli, $userAgent) . "'");
+		$mysqli->query("SET @IDString = '" . mysqli_real_escape_string($mysqli, $identificationString) . "'");
+		
+		$mysqli->query("CALL DeleteContentFromIdentification(@UserAgent, @IDString)");
+		
+		$mysqli->close();
 	}
 	
-	public function GetHighestFileNumber() {
-		$files = glob(self::$filePath . "*");
-		sort($files);
-		$highestNumber = filter_var(array_pop($files), FILTER_SANITIZE_NUMBER_INT);
-		if($highestNumber == "" || $highestNumber == NULL) {
-			return 0;
-		} else {
-			return $highestNumber;
-		}
-	}
-	
-	public function GetMazeTileCodeArray() {
-		if(isset($this->mazeTileCodeArray)) {
-			return $this->mazeTileCodeArray;
+	public function GetMazeString() {
+		if(isset($this->mazeString)) {
+			return $this->mazeString;
 		}
 		return false;
 	}

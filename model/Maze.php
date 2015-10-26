@@ -7,13 +7,8 @@ class Maze {
 	const maxX = 16;
 	const maxY = 6;
 	
-	private $mazeDAL;
 	private $mazeTileArray = array(array());
 	private $charPos;
-	
-	public function __construct(\model\DAL\MazeDAL $DAL) {
-		$this->mazeDAL = $DAL;
-	}
 	
 	public function GetMazeTileArray() {
 		return $this->mazeTileArray;
@@ -35,8 +30,9 @@ class Maze {
 		}
 	}
 	
-	public function FillMazeTileArrayFromDAL() {
-		$codeArray = $this->mazeDAL->GetMazeTileCodeArray();
+	public function FillMazeTileArrayFromString($mazeTileCodeString) {
+		$mazeTileCodeString = rtrim($mazeTileCodeString);
+		$codeArray = explode(PHP_EOL, $mazeTileCodeString);
 		
 		$mazeTileArray = array(array());
 		$arrayPos = 0;

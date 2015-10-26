@@ -15,27 +15,29 @@ class MazeController {
 	}
 	
 	public function InitMaze() {
-		if(is_numeric($this->mazeView->GetIdentification())) {
-			$this->mazeDAL->ReadFromFile($this->mazeView->GetIdentification());
-			$this->maze->FillMazeTileArrayFromDAL();
+		if($this->mazeView->GetIdentification()) {
+			$this->mazeDAL->GetDatabaseContent($this->mazeView->GetIdentification(), $this->mazeView->GetUserAgent());
+			$this->maze->FillMazeTileArrayFromString($this->mazeDAL->GetMazeString());
 		} else {
-			$this->mazeView->SetIdentification($this->mazeDAL->GetHighestFileNumber() + 1);
+			$this->mazeView->SetIdentification($this->CreateNewIdentification());
 			$this->maze->FillMazeTileArray($this->CreateMazeTileCodeArray());
 		}
 		$this->mazeView->SaveMazeTileArray($this->maze->GetMazeTileArray());
 	}
 	
 	public function SaveMaze($score, $stepsAtStartOfMaze, $stepsLeft) {
-		if(!is_numeric($this->mazeView->GetIdentification())) {
-			$userID = $this->mazeDAL->GetHighestFileNumber() + 1;
-		} else {
-			$userID = $this->mazeView->GetIdentification();
-		}
-		$this->mazeDAL->SaveToFile($this->maze->GetMazeTileArray(), $score, $stepsAtStartOfMaze, $stepsLeft, $userID);
+		$this->mazeDAL->SaveContentToDatabase(
+			$this->mazeView->GetIdentification(), 
+			$this->mazeView->GetUserAgent(), 
+			$this->maze->GetMazeTileArray(),
+			$score, 
+			$stepsAtStartOfMaze, 
+			$stepsLeft
+		);
 	}
 	
 	public function RemoveMaze() {
-		$this->mazeDAL->RemoveFile($this->mazeView->GetIdentification());
+		$this->mazeDAL->RemoveFromDatabase($this->mazeView->GetIdentification(), $this->mazeView->GetUserAgent());
 		$this->mazeView->RemoveIdentification();
 	}
 	
@@ -45,6 +47,7 @@ class MazeController {
 		
 		$characterCords = $this->GetRandomMazeTileCords();
 		$exitCords = $this->GetRandomMazeTileCords();
+		
 		while($characterCords == $exitCords) {
 			$exitCords = $this->GetRandomMazeTileCords();
 		}
@@ -147,5 +150,9 @@ class MazeController {
 			default:
 				return "";
 		}
+	}
+	
+	private function CreateNewIdentification() {
+		return password_hash(str_shuffle(bin2hex(openssl_random_pseudo_bytes(200))), PASSWORD_BCRYPT);
 	}
 }

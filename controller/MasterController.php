@@ -15,7 +15,7 @@ class MasterController {
 	
 	public function __construct() {
 		$this->mazeDAL = new \model\DAL\MazeDAL();
-		$this->maze = new \model\Maze($this->mazeDAL);
+		$this->maze = new \model\Maze();
 		$this->layoutView = new \view\LayoutView();
 		$this->mazeView = new \view\MazeView();
 		$this->controlsView = new \view\ControlsView();
@@ -27,8 +27,7 @@ class MasterController {
 	public function PlayGame() {
 		
 		if($this->controlsView->RestartClicked()) {
-			$this->mazeDAL->removeFile($this->mazeView->GetIdentification());
-			$this->mazeView->RemoveIdentification();
+			$this->mazeController->RemoveMaze();
 		}
 		
 		try {
@@ -36,7 +35,7 @@ class MasterController {
 		}
 		catch (\model\exceptions\IncorrectCookieInformationException $e) {
 			$this->mazeView->SaveExceptionMessage($e);
-			$this->mazeView->RemoveIdentification();
+			$this->mazeController->RemoveMaze();
 			$this->mazeController->InitMaze();
 		}
 		
@@ -57,7 +56,6 @@ class MasterController {
 					$this->scoreKeeper->DecreaseStepsLeft($stepsTaken);
 					
 					if($this->scoreKeeper->GetStepsLeft() <= 0) {
-						// fix real game over here
 						$this->mazeView->SaveGameOverMessage($this->scoreKeeper->GetScore());
 					}
 				}
@@ -65,7 +63,6 @@ class MasterController {
 					$this->mazeView->SaveExceptionMessage($e);
 				}
 			} else {
-				// fix real game over here
 				$this->mazeView->SaveGameOverMessage($this->scoreKeeper->GetScore());
 			}
 			

@@ -28,11 +28,15 @@ class MazeView {
 	public function GetIdentification() {
 		if(isset($_COOKIE[self::$identification])) {
 			return $_COOKIE[self::$identification];
+		} else if(isset($_SESSION[self::$identification])) {
+			return $_SESSION[self::$identification];
 		}
+		return false;
 	}
 	
 	public function SetIdentification($identification) {
 		setcookie(self::$identification, $identification, time()+60*60*24*30);
+		$_SESSION[self::$identification] = $identification;
 	}
 	
 	public function RemoveIdentification() {
@@ -57,5 +61,9 @@ class MazeView {
 	
 	public function GetMessages() {
 		return $this->messages;
+	}
+	
+	public function GetUserAgent() {
+		return $_SERVER["HTTP_USER_AGENT"];
 	}
 }

@@ -8,6 +8,7 @@
 	require_once('model/SpikeHazard.php');
 	require_once('model/GooHazard.php');
 	
+	require_once('model/DAL/DAL.php');
 	require_once('model/DAL/MazeDAL.php');
 
 	require_once('model/exceptions/CantMoveInDirectionException.php');
