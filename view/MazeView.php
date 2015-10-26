@@ -50,7 +50,10 @@ class MazeView {
 				$this->messages .= '<span class="message">You cannot move in that direction!</span>';
 				break;
 			case 'model\exceptions\IncorrectCookieInformationException' :
-				$this->messages .= '<span class="message">Your cookie contains invalid information</span>';
+				$this->messages .= '<span class="message">Your cookie contains invalid information!</span>';
+				break;
+			case 'model\exceptions\DatabaseException' :
+				$this->messages .= '<span class="message">Somekind of database related error happened!</span>';
 				break;
 		}
 	}

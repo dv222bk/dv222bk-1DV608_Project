@@ -14,6 +14,10 @@ class MazeDAL extends DAL {
 	public function GetDatabaseContent($identificationString, $userAgent) {
 		$mysqli = $this->GetMysqli();
 		
+		if($mysqli->connect_error) {
+			throw new \model\exceptions\DatabaseException();
+		}
+		
 		$mysqli->query("SET @UserAgent = '" . mysqli_real_escape_string($mysqli, $userAgent) . "'");
 		$mysqli->query("SET @IDString = '" . mysqli_real_escape_string($mysqli, $identificationString) . "'");
 		
@@ -37,6 +41,10 @@ class MazeDAL extends DAL {
 	
 	public function SaveContentToDatabase($identificationString, $userAgent, $mazeTileArray, $score, $stepsAtStartOfMaze, $stepsLeft) {
 		$mysqli = $this->GetMysqli();
+		
+		if($mysqli->connect_error) {
+			throw new \model\exceptions\DatabaseException();
+		}
 		
 		$mysqli->query("SET @UserAgent = '" . mysqli_real_escape_string($mysqli, $userAgent) . "'");
 		$mysqli->query("SET @IDString = '" . mysqli_real_escape_string($mysqli, $identificationString) . "'");
@@ -62,10 +70,14 @@ class MazeDAL extends DAL {
 	public function RemoveFromDatabase($identificationString, $userAgent) {
 		$mysqli = $this->GetMySqli();
 		
+		if($mysqli->connect_error) {
+			throw new \model\exceptions\DatabaseException();
+		}
+		
 		$mysqli->query("SET @UserAgent = '" . mysqli_real_escape_string($mysqli, $userAgent) . "'");
 		$mysqli->query("SET @IDString = '" . mysqli_real_escape_string($mysqli, $identificationString) . "'");
 		
-		$mysqli->query("CALL DeleteContentFromIdentification(@UserAgent, @IDString)");
+		$mysqli->query("CALL RemoveContentFromIdentification(@UserAgent, @IDString)");
 		
 		$mysqli->close();
 	}

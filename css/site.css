@@ -80,3 +80,7 @@ input:last-child {
 .mazeExit {
     color: blue;
 }
+
+.message {
+    display: block;
+}

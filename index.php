@@ -13,6 +13,7 @@
 
 	require_once('model/exceptions/CantMoveInDirectionException.php');
 	require_once('model/exceptions/IncorrectCookieInformationException.php');
+	require_once('model/exceptions/DatabaseException.php');
 
 	require_once('controller/Controls.php');
 	require_once('controller/MazeController.php');

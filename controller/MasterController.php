@@ -27,7 +27,12 @@ class MasterController {
 	public function PlayGame() {
 		
 		if($this->controlsView->RestartClicked()) {
-			$this->mazeController->RemoveMaze();
+			try {
+				$this->mazeController->RemoveMaze();
+			}
+			catch (\model\exceptions\DatabaseException $e) {
+				$this->mazeView->SaveExceptionMessage($e);
+			}
 		}
 		
 		try {
@@ -36,7 +41,15 @@ class MasterController {
 		catch (\model\exceptions\IncorrectCookieInformationException $e) {
 			$this->mazeView->SaveExceptionMessage($e);
 			$this->mazeController->RemoveMaze();
-			$this->mazeController->InitMaze();
+			try {
+				$this->mazeController->InitMaze();
+			}
+			catch (\model\exceptions\DatabaseException $e) {
+				$this->mazeView->SaveExceptionMessage($e);
+			}
+		}
+		catch (\model\exceptions\DatabaseException $e) {
+			$this->mazeView->SaveExceptionMessage($e);
 		}
 		
 		if($this->mazeDAL->HasReadInformation()) {
@@ -75,7 +88,12 @@ class MasterController {
 		
 		$this->maze->MakeLineOfSightTilesVisible();
 		
-		$this->mazeController->SaveMaze($this->scoreKeeper->GetScore(), $this->scoreKeeper->GetStepsAtStartOfMaze(), $this->scoreKeeper->GetStepsLeft());
+		try {
+			$this->mazeController->SaveMaze($this->scoreKeeper->GetScore(), $this->scoreKeeper->GetStepsAtStartOfMaze(), $this->scoreKeeper->GetStepsLeft());
+		}
+		catch (\model\exceptions\DatabaseException $e) {
+			$this->mazeView->SaveExceptionMessage($e);
+		}
 		
 		if($this->scoreKeeper->GetStepsLeft() > 0) {
 			$this->controls->EnableButtons();
