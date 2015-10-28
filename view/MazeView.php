@@ -2,6 +2,13 @@
 
 namespace view;
 
+/*
+ * Class: view/MazeView
+ * 
+ * Handles all visual aspects concerning a maze
+ * Also handles cookies related to identifying a maze owner
+ */
+
 class MazeView {
 	
 	private static $identification = 'MazeView::Identification';
@@ -9,6 +16,8 @@ class MazeView {
 	private $messages = '';
 	
 	public function SaveMazeTileArray($array) {
+		assert(is_array($array));
+		
 		$this->mazeTileArray = $array;
 	}
 	
@@ -35,6 +44,8 @@ class MazeView {
 	}
 	
 	public function SetIdentification($identification) {
+		assert(is_string($identification));
+		
 		setcookie(self::$identification, $identification, time()+60*60*24*30);
 		$_SESSION[self::$identification] = $identification;
 	}
@@ -53,12 +64,17 @@ class MazeView {
 				$this->messages .= '<span class="message">Your cookie contains invalid information!</span>';
 				break;
 			case 'model\exceptions\DatabaseException' :
-				$this->messages .= '<span class="message">Somekind of database related error happened!</span>';
+				$this->messages .= '<span class="message">Somekind of database related error occured!</span>';
+				break;
+			default :
+				$this->messages .= '<span class="message">An unknown error occured!</span>';
 				break;
 		}
 	}
 	
 	public function SaveGameOverMessage($score) {
+		assert(is_numeric($score));
+		
 		$this->messages .= '<span class="message">Game Over! Final score: ' . $score . '</span>';
 	}
 	

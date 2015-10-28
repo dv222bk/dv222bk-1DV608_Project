@@ -2,6 +2,12 @@
 
 namespace view;
 
+/*
+ * Class: view/ControlsView
+ * 
+ * Creates and keeps track of application controls.
+ */
+
 class ControlsView {
 	
 	private static $northButton = 'ControlsView::NorthButton';

@@ -2,6 +2,12 @@
 
 namespace controller;
 
+/*
+ * Class: controller/Controls
+ * 
+ * Keeps track of the logic concerning the games controls
+ */
+
 class Controls {
 	
 	private $maze;
@@ -36,11 +42,16 @@ class Controls {
 		}
 	}
 	
+	
+	/*
+	 * Moves the character from one tile to another
+	 * Returns the steps taken to complete the move (int)
+	 */
 	public function MoveCharacter() {
 		$mazeTileArray = $this->maze->GetMazeTileArray();
 		$characterTileCords = $this->maze->GetCharacterTileCords();
 		$newTileCords = $characterTileCords;
-		$stepsTaken = 1;
+		$stepsTaken = 1; // When the character moves, 1 step is always used
 		
 		if($this->controlsView->NorthClicked()) {
 			
@@ -50,8 +61,8 @@ class Controls {
 			
 			$newTileCords["y"] -= 1;
 			
-			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "N");
-			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "S");
+			$stepsTaken += $this->GetStepsReductionFromTileHazard($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "N");
+			$stepsTaken += $this->GetStepsReductionFromTileHazard($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "S");
 						
 		} else if ($this->controlsView->EastClicked()) {
 			
@@ -61,8 +72,8 @@ class Controls {
 			
 			$newTileCords["x"] += 1;
 			
-			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "E");
-			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "W");
+			$stepsTaken += $this->GetStepsReductionFromTileHazard($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "E");
+			$stepsTaken += $this->GetStepsReductionFromTileHazard($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "W");
 			
 		} else if ($this->controlsView->WestClicked()) {
 			
@@ -72,8 +83,8 @@ class Controls {
 			
 			$newTileCords["x"] -= 1;
 			
-			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "W");
-			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "E");
+			$stepsTaken += $this->GetStepsReductionFromTileHazard($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "W");
+			$stepsTaken += $this->GetStepsReductionFromTileHazard($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "E");
 			
 		} else if ($this->controlsView->SouthClicked()) {
 			
@@ -83,8 +94,8 @@ class Controls {
 			
 			$newTileCords["y"] += 1;
 			
-			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "S");
-			$stepsTaken += $this->GetStepsReductionFromTile($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "N");
+			$stepsTaken += $this->GetStepsReductionFromTileHazard($mazeTileArray[$characterTileCords["y"]][$characterTileCords["x"]], "S");
+			$stepsTaken += $this->GetStepsReductionFromTileHazard($mazeTileArray[$newTileCords["y"]][$newTileCords["x"]], "N");
 			
 		}
 		
@@ -99,7 +110,7 @@ class Controls {
 		return $stepsTaken;
 	}
 
-	private function GetStepsReductionFromTile($tile, $directionChar) {
+	private function GetStepsReductionFromTileHazard($tile, $directionChar) {
 		if($mazeHazard = $tile->GetHazard($directionChar)) {
 			return $mazeHazard->GetStepRedcution();
 		}

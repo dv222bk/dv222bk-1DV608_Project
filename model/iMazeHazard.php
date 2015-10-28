@@ -2,6 +2,12 @@
 
 namespace model;
 
+/*
+ * Interface: model/iMazeHazard
+ * 
+ * Interface for maze hazards. All mazehazards must use iMazeHazard interface.
+ */
+
 interface iMazeHazard {
 		
 	public function __construct();

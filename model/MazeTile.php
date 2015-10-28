@@ -2,6 +2,12 @@
     
 namespace model;
 
+/*
+ * Class: model/MazeTile
+ * 
+ * Contains all infromation about a mazeTile
+ */
+ 
 class MazeTile {
 	
 	/*
@@ -35,6 +41,7 @@ class MazeTile {
 	
 	public function __construct($code) {
 		assert(is_string($code));
+		
 		$this->mazeTileCode = $code;
 		
 		if($this->hasCharacter()) {
@@ -57,6 +64,8 @@ class MazeTile {
 	}
 	
 	public function SetMazeTileCode($code) {
+		assert(is_string($code));
+		
 		$this->__construct($code);
 	}
 	
@@ -103,6 +112,8 @@ class MazeTile {
 	}
 
 	public function GetHazard($directionChar) {
+		assert(is_string($directionChar) && count($directionChar) == 1);
+		
 		foreach($this->mazeHazards as $mazeHazard) {
 			if(is_numeric(strpos($this->mazeTileCode, $directionChar . $mazeHazard->GetMazeTileCodeChar()))) {
 				return $mazeHazard;

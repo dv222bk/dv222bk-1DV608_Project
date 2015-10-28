@@ -2,9 +2,14 @@
 
 namespace model\DAL;
 
+/*
+ * Class: model/DAL/MazeDAL (extends DAL)
+ * 
+ * Retrives and saves information to the database
+ */
+
 class MazeDAL extends DAL {
 	
-	private static $filePath = "save_files/";
 	private $mazeString;
 	private $score;
 	private $stepsAtStartOfMaze;
@@ -12,6 +17,9 @@ class MazeDAL extends DAL {
 	private $hasReadInformation = false;
 	
 	public function GetDatabaseContent($identificationString, $userAgent) {
+		assert(is_string($identificationString));
+		assert(is_string($userAgent));
+		
 		$mysqli = $this->GetMysqli();
 		
 		if($mysqli->connect_error) {
@@ -40,6 +48,13 @@ class MazeDAL extends DAL {
 	}
 	
 	public function SaveContentToDatabase($identificationString, $userAgent, $mazeTileArray, $score, $stepsAtStartOfMaze, $stepsLeft) {
+		assert(is_string($identificationString));
+		assert(is_string($userAgent));
+		assert(is_array($mazeTileArray));
+		assert(is_numeric($score));
+		assert(is_numeric($stepsAtStartOfMaze));
+		assert(is_numeric($stepsLeft));
+		
 		$mysqli = $this->GetMysqli();
 		
 		if($mysqli->connect_error) {
@@ -68,6 +83,9 @@ class MazeDAL extends DAL {
 	}
 	
 	public function RemoveFromDatabase($identificationString, $userAgent) {
+		assert(is_string($identificationString));
+		assert(is_string($userAgent));
+		
 		$mysqli = $this->GetMySqli();
 		
 		if($mysqli->connect_error) {

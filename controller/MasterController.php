@@ -2,6 +2,12 @@
 
 namespace controller;
 
+/*
+ * Class: controller/MasterController
+ * 
+ * Controls the flow of the application
+ */
+
 class MasterController {
 	
 	private $mazeDAL;
@@ -12,6 +18,8 @@ class MasterController {
 	private $controls;
 	private $mazeController;
 	private $scoreKeeper;
+	private $stepsTaken = 0;
+	private $gainedScore = 0;
 	
 	public function __construct() {
 		$this->mazeDAL = new \model\DAL\MazeDAL();
@@ -25,7 +33,27 @@ class MasterController {
 	}
 	
 	public function PlayGame() {
+	    $this->InitMaze();
+		$this->GetScoreAndSteps();
+		$this->MoveCharacter();
+		$this->SaveMaze();
 		
+		if($this->scoreKeeper->GetStepsLeft() > 0) {
+			$this->controls->EnableButtons();
+		}
+		
+		$this->layoutView->Render
+		(
+			$this->mazeView, 
+			$this->controlsView, 
+			$this->scoreKeeper->GetScore(), 
+			$this->scoreKeeper->GetStepsLeft(),
+			$this->stepsTaken,
+			$this->gainedScore
+		);
+	}
+
+	private function InitMaze() {
 		if($this->controlsView->RestartClicked()) {
 			try {
 				$this->mazeController->RemoveMaze();
@@ -51,23 +79,24 @@ class MasterController {
 		catch (\model\exceptions\DatabaseException $e) {
 			$this->mazeView->SaveExceptionMessage($e);
 		}
-		
+	}
+	
+	private function GetScoreAndSteps() {
 		if($this->mazeDAL->HasReadInformation()) {
 			$this->scoreKeeper->SetScore($this->mazeDAL->GetScore());
 			$this->scoreKeeper->SetStepsAtStartOfMaze($this->mazeDAL->GetStepsAtStartOfMaze());
 			$this->scoreKeeper->SetStepsLeft($this->mazeDAL->GetStepsLeft());
 		}
-		
-		$stepsTaken = 0;
-		$gainedScore = 0;
-		
+	}
+	
+	private function MoveCharacter() {
 		if($this->controlsView->NorthClicked() || $this->controlsView->WestClicked() || 
 		$this->controlsView->EastClicked() || $this->controlsView->SouthClicked()) {
 			
 			if($this->scoreKeeper->GetStepsLeft() > 0) {
 				try {
-					$stepsTaken = $this->controls->MoveCharacter();
-					$this->scoreKeeper->DecreaseStepsLeft($stepsTaken);
+					$this->stepsTaken = $this->controls->MoveCharacter();
+					$this->scoreKeeper->DecreaseStepsLeft($this->stepsTaken);
 					
 					if($this->scoreKeeper->GetStepsLeft() <= 0) {
 						$this->mazeView->SaveGameOverMessage($this->scoreKeeper->GetScore());
@@ -84,35 +113,22 @@ class MasterController {
 			
 			try {
 				$this->mazeController->NextMaze();
-				$gainedScore = $this->scoreKeeper->AddScoreEndOfMaze();
+				$this->gainedScore = $this->scoreKeeper->AddScoreEndOfMaze();
 			}
 			catch (\model\exceptions\CantMoveInDirectionException $e) {
 				$this->mazeView->SaveExceptionMessage($e);
 			}
-			
 		}
 		
-		$this->maze->MakeLineOfSightTilesVisible();
-		
+		$this->mazeController->MakeLineOfSightTilesVisible();	
+	}
+
+	private function SaveMaze() {
 		try {
 			$this->mazeController->SaveMaze($this->scoreKeeper->GetScore(), $this->scoreKeeper->GetStepsAtStartOfMaze(), $this->scoreKeeper->GetStepsLeft());
 		}
 		catch (\model\exceptions\DatabaseException $e) {
 			$this->mazeView->SaveExceptionMessage($e);
 		}
-		
-		if($this->scoreKeeper->GetStepsLeft() > 0) {
-			$this->controls->EnableButtons();
-		}
-		
-		$this->layoutView->Render
-		(
-			$this->mazeView, 
-			$this->controlsView, 
-			$this->scoreKeeper->GetScore(), 
-			$this->scoreKeeper->GetStepsLeft(),
-			$stepsTaken,
-			$gainedScore
-		);
 	}
 }

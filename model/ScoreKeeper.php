@@ -2,6 +2,12 @@
 
 namespace model;
 
+/*
+ * Class: model/ScoreKeeper
+ * 
+ * Keeps track of the players score and the steps the character has left
+ */
+
 class ScoreKeeper {
 	
 	private $score = 0;
@@ -23,21 +29,25 @@ class ScoreKeeper {
 	
 	public function SetScore($newScore) {
 		assert(is_numeric($newScore));
+		
 		$this->score = $newScore;
 	}
 	
 	public function SetStepsAtStartOfMaze($newStepsAtStartOfMaze) {
 		assert(is_numeric($newStepsAtStartOfMaze));
+		
 		$this->stepsAtStartOfMaze = $newStepsAtStartOfMaze;
 	}
 	
 	public function SetStepsLeft($newStepsLeft) {
 		assert(is_numeric($newStepsLeft));
+		
 		$this->stepsLeft = $newStepsLeft;
 	}
 	
 	public function DecreaseStepsLeft($decreaseAmount) {
 		assert(is_numeric($decreaseAmount));
+		
 		$this->stepsLeft -= $decreaseAmount;
 	}
 	

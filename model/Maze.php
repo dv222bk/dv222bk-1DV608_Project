@@ -2,6 +2,12 @@
 
 namespace model;
 
+/*
+ * Class: model/Maze
+ * 
+ * Contains everything about the maze
+ */
+
 class Maze {
 	
 	const maxX = 16;
@@ -23,6 +29,8 @@ class Maze {
 	}
 	
 	public function FillMazeTileArray($mazeTileCodeArray) {
+		assert(is_array($mazeTileCodeArray));
+		
 		for($y = 0; $y < self::maxY; $y += 1) {
 			for($x = 0; $x < self::maxX; $x += 1) {
 				$this->mazeTileArray[$y][$x] = new MazeTile($mazeTileCodeArray[$y][$x]);
@@ -31,6 +39,8 @@ class Maze {
 	}
 	
 	public function FillMazeTileArrayFromString($mazeTileCodeString) {
+		assert(is_string($mazeTileCodeString));
+		
 		$mazeTileCodeString = rtrim($mazeTileCodeString);
 		$codeArray = explode(PHP_EOL, $mazeTileCodeString);
 		
@@ -60,45 +70,6 @@ class Maze {
 			}
 		}
 		return false;
-	}
-	
-	public function MakeLineOfSightTilesVisible() {
-		$yxCords = $this->GetCharacterTileCords();
-		if($yxCords != false) {
-			$mazeTileArray = $this->mazeTileArray;
-			
-			$distance = 0;
-			while($mazeTileArray[$yxCords["y"] - $distance][$yxCords["x"]]->HasNorthExit()) {
-				if($mazeTileArray[$yxCords["y"] - ($distance + 1)][$yxCords["x"]]->HasSouthExit()) {
-					$mazeTileArray[$yxCords["y"] - ($distance + 1)][$yxCords["x"]]->MakeVisible();
-				}	
-				$distance += 1;
-			}
-			
-			$distance = 0;
-			while($mazeTileArray[$yxCords["y"]][$yxCords["x"] + $distance]->HasEastExit()) {
-				if($mazeTileArray[$yxCords["y"]][$yxCords["x"] + ($distance + 1)]->HasWestExit()) {
-					$mazeTileArray[$yxCords["y"]][$yxCords["x"] + ($distance + 1)]->MakeVisible();
-				}	
-				$distance += 1;
-			}
-			
-			$distance = 0;
-			while($mazeTileArray[$yxCords["y"]][$yxCords["x"] - $distance]->HasWestExit()) {
-				if($mazeTileArray[$yxCords["y"]][$yxCords["x"] - ($distance + 1)]->HasEastExit()) {
-					$mazeTileArray[$yxCords["y"]][$yxCords["x"] - ($distance + 1)]->MakeVisible();
-				}	
-				$distance += 1;
-			}
-			
-			$distance = 0;
-			while($mazeTileArray[$yxCords["y"] + $distance][$yxCords["x"]]->HasSouthExit()) {
-				if($mazeTileArray[$yxCords["y"] + ($distance + 1)][$yxCords["x"]]->HasNorthExit()) {
-					$mazeTileArray[$yxCords["y"] + ($distance + 1)][$yxCords["x"]]->MakeVisible();
-				}	
-				$distance += 1;
-			}
-		}
 	}
 }
 

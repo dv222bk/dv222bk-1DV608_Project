@@ -2,9 +2,20 @@
 
 namespace view;
 
+/*
+ * Class: view/LayoutView
+ * 
+ * Outputs the layout for the application.
+ */
+
 class LayoutView {
 	
 	public function Render(MazeView $mazeView, ControlsView $controlsView, $score, $stepsLeft, $stepsTaken, $scoreGained) {
+		assert(is_numeric($score));
+		assert(is_numeric($stepsLeft));
+		assert(is_numeric($stepsTaken));
+		assert(is_numeric($scoreGained));
+		
 		echo '<!DOCTYPE html>
 		  <html>
 		      <head>

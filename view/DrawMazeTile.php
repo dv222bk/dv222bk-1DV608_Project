@@ -2,6 +2,12 @@
 
 namespace view;
 
+/*
+ * Class: view/DrawMazeTile
+ * 
+ * Depicts a maze tile as HTML code and returns it
+ */
+
 class DrawMazeTile {
 	
 	public function DrawMazeTile(\model\MazeTile $mazeTile) {
@@ -12,12 +18,10 @@ class DrawMazeTile {
 			$drawnMazeTile = '<div class="mazeTile">';
 		}
 		
-		if($mazeTile->GetVisibility()) {
-			
+		if($mazeTile->GetVisibility()) {		
 			$drawnMazeTile .= $this->DrawNorthPartOfTile($mazeTile);
 			$drawnMazeTile .= $this->DrawCenterPartOfTile($mazeTile);
-			$drawnMazeTile .= $this->DrawSouthPartOfTile($mazeTile);
-			
+			$drawnMazeTile .= $this->DrawSouthPartOfTile($mazeTile);		
 		}
 		
 		$drawnMazeTile .= '</div>';
