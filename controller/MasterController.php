@@ -81,8 +81,13 @@ class MasterController {
 			
 		} else if ($this->controlsView->MazeExitClicked()) {
 			
-			$this->mazeController->NextMaze();
-			$this->scoreKeeper->AddScoreEndOfMaze();
+			try {
+				$this->mazeController->NextMaze();
+				$this->scoreKeeper->AddScoreEndOfMaze();
+			}
+			catch (\model\exceptions\CantMoveInDirectionException $e) {
+				$this->mazeView->SaveExceptionMessage($e);
+			}
 			
 		}
 		

@@ -3,6 +3,7 @@
 	require_once('model/MazeTile.php');
 	require_once('model/ScoreKeeper.php');
 	
+	require_once('model/HazardFactory.php');
 	require_once('model/iMazeHazard.php');
 	require_once('model/PitHazard.php');
 	require_once('model/SpikeHazard.php');

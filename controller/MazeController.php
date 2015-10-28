@@ -80,7 +80,7 @@ class MazeController {
 					}
 				}
 				
-				// Randomize a south and/or west exit, or add a south or east exit if only one is possible
+				// Randomize a south and/or east exit, or add a south or east exit if only one is possible
 				if($y + 1 < $maxY && $x + 1 < $maxX) {
 					if(mt_rand(0, 1)) {
 						$mazeTileCode .= "S" . $this->GetRandomHazard();
@@ -129,7 +129,7 @@ class MazeController {
 			$this->maze->FillMazeTileArray($this->CreateMazeTileCodeArray());
 			$this->mazeView->SaveMazeTileArray($this->maze->GetMazeTileArray());
 		} else {
-			throw new \model\exceptions\CannotMoveInDirectionException();
+			throw new \model\exceptions\CantMoveInDirectionException();
 		}
 	}
 
@@ -138,18 +138,13 @@ class MazeController {
 	}
 
 	private function GetRandomHazard() {
-		$randomNumber = mt_rand(0, 12);
+		$mazeHazards = (new \model\HazardFactory())->GetStandardHazards();
 		
-		switch ($randomNumber) {
-			case 10:
-				return "P";
-			case 11:
-				return "G";
-			case 12:
-				return "H";
-			default:
-				return "";
+		if(mt_rand(0, 12) >= 10) {
+			return $mazeHazards[mt_rand(0, count($mazeHazards) - 1)]->GetMazeTileCodeChar(); 
 		}
+		
+		return "";
 	}
 	
 	private function CreateNewIdentification() {

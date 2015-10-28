@@ -41,12 +41,7 @@ class MazeTile {
 			$this->visible = true;
 		}
 		
-		$this->mazeHazards = 
-			[
-				new SpikeHazard(),
-				new GooHazard(),
-				new PitHazard()			
-			];
+		$this->mazeHazards = (new HazardFactory())->GetStandardHazards();
 	}
 	
 	public function MakeVisible() {
