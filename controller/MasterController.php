@@ -59,6 +59,7 @@ class MasterController {
 		}
 		
 		$stepsTaken = 0;
+		$gainedScore = 0;
 		
 		if($this->controlsView->NorthClicked() || $this->controlsView->WestClicked() || 
 		$this->controlsView->EastClicked() || $this->controlsView->SouthClicked()) {
@@ -83,7 +84,7 @@ class MasterController {
 			
 			try {
 				$this->mazeController->NextMaze();
-				$this->scoreKeeper->AddScoreEndOfMaze();
+				$gainedScore = $this->scoreKeeper->AddScoreEndOfMaze();
 			}
 			catch (\model\exceptions\CantMoveInDirectionException $e) {
 				$this->mazeView->SaveExceptionMessage($e);
@@ -110,7 +111,8 @@ class MasterController {
 			$this->controlsView, 
 			$this->scoreKeeper->GetScore(), 
 			$this->scoreKeeper->GetStepsLeft(),
-			$stepsTaken
+			$stepsTaken,
+			$gainedScore
 		);
 	}
 }

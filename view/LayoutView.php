@@ -4,7 +4,7 @@ namespace view;
 
 class LayoutView {
 	
-	public function Render(MazeView $mazeView, ControlsView $controlsView, $score, $stepsLeft, $stepsTaken) {
+	public function Render(MazeView $mazeView, ControlsView $controlsView, $score, $stepsLeft, $stepsTaken, $scoreGained) {
 		echo '<!DOCTYPE html>
 		  <html>
 		      <head>
@@ -19,7 +19,7 @@ class LayoutView {
 				      	' . $mazeView->GetMazeHTML() . '
 				      </div>
 				      <div id="Sidebar">
-				      	  <div id="scoreContainer">Score: <span id="score">' . $score . '</span></div>
+				      	  <div id="scoreContainer">Score: <span id="score">' . $score . (($scoreGained !== 0) ? ' (+' . $scoreGained . ')' : '') . '</span></div>
 					      <div id="stepsLeftContainer">Steps left: <span id="stepsLeft">' . $stepsLeft . (($stepsTaken !== 0) ? ' (-' . $stepsTaken . ')' : '') . '</span></div>
 					      <h2>Controls</h2>
 					      <div id="Controls">

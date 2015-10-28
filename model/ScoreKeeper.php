@@ -15,8 +15,10 @@ class ScoreKeeper {
 	}
 	
 	public function AddScoreEndOfMaze() {
-		$this->score += (self::$totalSteps - ($this->stepsAtStartOfMaze - $this->stepsLeft)) * 500;
+		$gainedScore = (self::$totalSteps - ($this->stepsAtStartOfMaze - $this->stepsLeft)) * self::$totalSteps;
+		$this->score += $gainedScore;
 		$this->stepsAtStartOfMaze = $this->stepsLeft;
+		return $gainedScore;
 	}
 	
 	public function SetScore($newScore) {
